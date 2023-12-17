@@ -1,0 +1,9 @@
+organization: n01e0
+project: ppb
+token: ghp_XXX
+annotation_labels:
+ - TODO
+ - FIXME
+ - BUG
+ - HACK
+ - "#\[allow\]"

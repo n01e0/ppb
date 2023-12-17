@@ -1,0 +1,15 @@
+[tasks.ci]
+description = "task for CI"
+dependencies = ["test", "check"]
+
+[tasks.check]
+command = "cargo"
+args = ["check"]
+
+[tasks.test]
+command = "cargo"
+args = ["test"]
+
+[tasks.build]
+command = "cargo"
+args = ["build", "--release", "--all-targets"]
