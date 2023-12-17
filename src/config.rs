@@ -24,6 +24,7 @@ pub struct Args {
     /// default: ["TODO", "FIXME"]
     #[clap(long="annotation-labels")]
     pub annotation_labels: Option<Vec<String>>,
+    // TODO ignore files
 }
 
 #[derive(Debug, Deserialize)]

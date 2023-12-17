@@ -17,16 +17,6 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  ppb:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: n01e0/ppb@main
-        with:
-          organization: n01e0
-          project: ppb
-          token: ${{ secrets.GITHUB_TOKEN }}
-
   check:
     runs-on: ubuntu-latest
     steps:

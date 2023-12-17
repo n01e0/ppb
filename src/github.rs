@@ -20,7 +20,8 @@ impl GitHub {
     pub async fn get_issues(&self) -> Result<Vec<Issue>> {
         let page = self.client.issues(&self.config.organization, &self.config.repository)
             .list()
-            .state(params::State::Open)
+            .labels(&vec![String::from(config::PPB_ISSUE_LABEL)])
+            .state(params::State::All)
             .per_page(100)
             .send()
             .await?;
