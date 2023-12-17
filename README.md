@@ -28,5 +28,5 @@ annotation_labels:
  - FIXME
  - BUG
  - HACK
- - "#\[allow\]"
+ - "#\\[allow\\]"
  ```
