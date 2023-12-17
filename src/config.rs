@@ -12,7 +12,7 @@ pub struct Args {
     #[clap(short, long)]
     pub config: Option<String>,
     /// organization
-    #[clap(long="org")]
+    #[clap(long="organization")]
     pub organization: Option<String>,
     /// project
     #[clap(long="project")]
