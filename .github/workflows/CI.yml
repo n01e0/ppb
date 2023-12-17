@@ -50,4 +50,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build Docker image
-        run: docker build -t ppb:${{ github.ref }} .
+        run: docker build -t ppb:${{ github.sha }} .
