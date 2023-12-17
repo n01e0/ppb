@@ -18,7 +18,7 @@ impl GitHub {
     }
 
     pub async fn get_issues(&self) -> Result<Vec<Issue>> {
-        let page = self.client.issues(&self.config.organization, &self.config.project)
+        let page = self.client.issues(&self.config.organization, &self.config.repository)
             .list()
             .state(params::State::Open)
             .per_page(100)
@@ -31,7 +31,7 @@ impl GitHub {
     }
 
     pub async fn create_issue(&self, title: &str, body: &str) -> Result<Issue> {
-        self.client.issues(&self.config.organization, &self.config.project)
+        self.client.issues(&self.config.organization, &self.config.repository)
             .create(title)
             .body(body)
             .labels(Some(vec![String::from(config::PPB_ISSUE_LABEL)]))

@@ -10,7 +10,7 @@ Usage: ppb [OPTIONS]
 Options:
   -c, --config <CONFIG>                        config file
       --org <ORGANIZATION>                     organization
-      --project <PROJECT>                      project
+      --repository <PROJECT>                      repository
       --token <TOKEN>                          GitHub token
       --annotation-labels <ANNOTATION_LABELS>  annotation labels default: ["TODO", "FIXME"]
   -h, --help                                   Print help
@@ -21,7 +21,7 @@ Options:
 
 ```yaml
 organization: n01e0
-project: ppb
+repository: ppb
 token: ghp_XXX
 annotation_labels:
  - TODO

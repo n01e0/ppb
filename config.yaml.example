@@ -1,5 +1,5 @@
 organization: n01e0
-project: ppb
+repository: ppb
 token: ghp_XXX
 annotation_labels:
  - TODO

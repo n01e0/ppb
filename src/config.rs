@@ -14,9 +14,9 @@ pub struct Args {
     /// organization
     #[clap(long="organization")]
     pub organization: Option<String>,
-    /// project
-    #[clap(long="project")]
-    pub project: Option<String>,
+    /// repository
+    #[clap(long="repository")]
+    pub repository: Option<String>,
     /// GitHub token
     #[clap(long="token")]
     pub token: Option<String>,
@@ -29,7 +29,7 @@ pub struct Args {
 #[derive(Debug, Deserialize)]
 struct ConfigFile {
     organization: Option<String>,
-    project: Option<String>,
+    repository: Option<String>,
     token: String,
     annotation_labels: Option<Vec<String>>,
 }
@@ -37,7 +37,7 @@ struct ConfigFile {
 #[derive(Debug)]
 pub struct Config {
     pub organization: String,
-    pub project: String,
+    pub repository: String,
     pub token: String,
     pub annotation_labels: Vec<String>,
 }
@@ -50,7 +50,7 @@ impl Config {
                 let config_file: ConfigFile = serde_yaml::from_str(&config_file).unwrap();
                 Ok(Config {
                     organization: config_file.organization.with_context(|| "organization must be set")?,
-                    project: config_file.project.with_context(|| "project must be set")?,
+                    repository: config_file.repository.with_context(|| "repository must be set")?,
                     token: config_file.token,
                     annotation_labels: config_file.annotation_labels.unwrap_or_else(|| DEFAULT_ANNOTATION_LABELS.iter().map(|s| s.to_string()).collect()),
                 })
@@ -58,7 +58,7 @@ impl Config {
             None => {
                 Ok(Config {
                     organization: args.organization.clone().with_context(|| "organization must be set")?,
-                    project: args.project.clone().with_context(|| "project must be set")?,
+                    repository: args.repository.clone().with_context(|| "repository must be set")?,
                     token: args.token.clone().with_context(|| "token must be set")?,
                     annotation_labels: args.annotation_labels.clone().unwrap_or_else(|| DEFAULT_ANNOTATION_LABELS.iter().map(|s| s.to_string()).collect()),
                 })
