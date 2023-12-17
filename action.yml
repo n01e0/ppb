@@ -11,8 +11,8 @@ inputs:
   token:
     description: 'GitHub token'
     required: true
-  annotation_label:
-    description: 'annotation comment label'
+  annotation_labels:
+    description: 'annotation comment labels'
     required: false
     default: 'TODO FIXME'
 
@@ -27,6 +27,6 @@ runs:
       '${{ inputs.repository }}',
       '--token',
       '${{ inputs.token }}',
-      '--annotation_label',
-      '${{ inputs.annotation_label }}',
+      '--annotation-labels',
+      '${{ inputs.annotation_labels }}',
     ]
