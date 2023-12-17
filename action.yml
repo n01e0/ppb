@@ -1,0 +1,22 @@
+name: 'Postpone Bot'
+author: 'n01e0'
+description: 'Create an issue for implementation that has been postponed with comments such as TODO or FIXME.'
+inputs:
+  args:
+    description: >-
+      argument for postpone-bot.
+        -c, --config <CONFIG>                        config file
+            --org <ORGANIZATION>                     organization
+            --project <PROJECT>                      project
+            --token <TOKEN>                          GitHub token
+            --annotation-labels <ANNOTATION_LABELS>  annotation labels default [\"TODO\", \"FIXME\"]
+        -h, --help                                   Print help
+        -V, --version                                Print version
+    required: true
+    default: '-c .postpone-bot.yml'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.args }}
