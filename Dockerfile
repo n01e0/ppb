@@ -7,4 +7,4 @@ RUN cargo build --release --target=x86_64-unknown-linux-musl
 
 FROM alpine:latest
 COPY --from=builder /build/target/x86_64-unknown-linux-musl/release/ppb /ppb
-CMD ["/ppb"]
+ENTRYPOINT ["/ppb"]
