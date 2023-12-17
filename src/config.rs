@@ -17,10 +17,11 @@ pub struct Args {
     /// project
     #[clap(long="project")]
     pub project: Option<String>,
-    /// token
+    /// GitHub token
     #[clap(long="token")]
     pub token: Option<String>,
     /// annotation labels
+    /// default: ["TODO", "FIXME"]
     #[clap(long="annotation-labels")]
     pub annotation_labels: Option<Vec<String>>,
 }
