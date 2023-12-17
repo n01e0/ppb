@@ -42,6 +42,9 @@ impl Postpone {
     }
 
     pub fn to_issue(&self) -> (String, String) {
+        // TODO: フォーマットを変えられるようにする
+        // TODO: タイトルがファイル名と行数じゃわかりづらい
+        // TODO: permanent linkをつけたい
         (format!("{}:{}", self.file, self.line_number), self.matched.clone())
     }
 }
