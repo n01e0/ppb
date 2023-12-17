@@ -14,7 +14,7 @@ inputs:
   annotation_labels:
     description: 'annotation comment labels'
     required: false
-    default: 'TODO FIXME'
+    default: 'TODO,FIXME'
 
 runs:
   using: 'docker'

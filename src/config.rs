@@ -22,7 +22,7 @@ pub struct Args {
     pub token: Option<String>,
     /// annotation labels
     /// default: ["TODO", "FIXME"]
-    #[clap(long="annotation-labels")]
+    #[clap(long="annotation-labels", value_parser, num_args = 1.., value_delimiter = ',')]
     pub annotation_labels: Option<Vec<String>>,
     // TODO ignore files
 }
