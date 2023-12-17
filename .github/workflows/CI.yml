@@ -23,7 +23,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: n01e0/ppb@main
         with:
-          args: --organization n01e0 --project ppb --token ${{ secrets.GITHUB_TOKEN }}
+          organization: n01e0
+          project: ppb
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   check:
     runs-on: ubuntu-latest
