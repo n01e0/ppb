@@ -19,6 +19,7 @@ async fn main() -> Result<()>  {
         issue.labels.iter().any(|label| label.name == "postpone")
     }).collect::<Vec<_>>();
 
+    // TODO: bodyが一致してタイトルが異なる場合、タイトルを更新する
     let postpones = Postpone::search(&pattern)?
         .into_iter()
         .map(|postpone| postpone.to_issue())
