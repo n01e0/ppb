@@ -17,5 +17,5 @@ serde = { version="1.0.193", features=["derive"] }
 serde_yaml = "0.9.27"
 # TODO thiserror使う
 #thiserror = "1.0.50"
-tokio = { version="1.35.0", features=["macros", "rt-multi-thread"] }
+tokio = { version="1.35.1", features=["macros", "rt-multi-thread"] }
 walkdir = "2.4.0"
