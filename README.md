@@ -8,13 +8,28 @@ postpone bot
 Usage: ppb [OPTIONS]
 
 Options:
-  -c, --config <CONFIG>                        config file
-      --org <ORGANIZATION>                     organization
-      --repository <PROJECT>                      repository
-      --token <TOKEN>                          GitHub token
-      --annotation-labels <ANNOTATION_LABELS>  annotation labels default: ["TODO", "FIXME"]
-  -h, --help                                   Print help
-  -V, --version                                Print version
+  -c, --config <CONFIG>
+          config file
+      --organization <ORGANIZATION>
+          organization
+      --repository <REPOSITORY>
+          repository
+      --token <TOKEN>
+          GitHub token
+  -l, --listup
+          list up postpones
+      --annotation-labels <ANNOTATION_LABELS>...
+          annotation labels default: ["TODO", "FIXME"]
+      --title-format <TITLE_FORMAT>
+          title format you can use following variables {label} {file} {line_number} {line} default: "Postpone: {label} {file} {line_number}" [default: "[Postpone] {label}: {line}"]
+      --body-format <BODY_FORMAT>
+          body format you can use following variables {label} {file} {line_number} {line} default: "Postpone: {label}\n\n{file}:{line_number}\n\n```\n{line}\n```" [default: "\nPostpone: {label}\n\n{file}:{line_number}\n\n```\n{line}\n```\n"]
+      --dry-run
+          dry run will not create issues default: false
+  -h, --help
+          Print help
+  -V, --version
+          Print version
 ```
 
 ## Config
