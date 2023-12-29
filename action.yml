@@ -2,7 +2,7 @@ name: 'Postpone Bot'
 author: 'n01e0'
 description: 'Create an issue for implementation that has been postponed with comments such as TODO or FIXME.'
 inputs:
-  config_file:
+  config:
     description: 'config file'
     required: true
   token:
@@ -16,6 +16,6 @@ runs:
     [
       '--token',
       '${{ inputs.token }}',
-      '--config-file',
+      '--config',
       '${{ inputs.config_file }}',
     ]
