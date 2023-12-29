@@ -24,9 +24,11 @@ organization: n01e0
 repository: ppb
 token: ghp_XXX
 annotation_labels:
- - TODO
- - FIXME
- - BUG
- - HACK
- - "#\\[allow\\]"
+ - "TODO:* "
+ - "FIXME:* "
+ - "BUG:* "
+ - "HACK:* "
+ - "#\\[allow\\([a-zA-Z_].+\\)\\]"
+title_format: "{label}: {file}:{line_number}"
+body_format: "{line}"
  ```

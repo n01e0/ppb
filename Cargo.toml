@@ -2,6 +2,10 @@
 name = "ppb"
 version = "0.2.1"
 edition = "2021"
+authors = ["n01e0 <reoshiseki@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/n01e0/ppb"
 description = "postpone bot"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
