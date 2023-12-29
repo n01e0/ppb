@@ -1,6 +1,9 @@
 name: 'Postpone Bot'
 author: 'n01e0'
 description: 'Create an issue for implementation that has been postponed with comments such as TODO or FIXME.'
+branding:
+  icon: 'align-left'
+  color: 'blue'
 inputs:
   config:
     description: 'config file'
