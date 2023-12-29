@@ -14,11 +14,27 @@ inputs:
   annotation_labels:
     description: 'annotation comment labels'
     required: false
-    default: 'TODO,FIXME'
+    default: 'TODO:* ,FIXME:* , BUG:* ,HACK:* '
+  title_format:
+    description: 'issue title format'
+    required: false
+    default: '[Postpone] {label} {line}'
+  body_format:
+    description: 'issue body format'
+    required: false
+    default: |
+      This issue was created by Postpone Bot
+      \{label\}
+
+      \{file\}:\{line_number\}
+
+      ```
+      \{line\}
+      ```
 
 runs:
   using: 'docker'
-  image: 'ghcr.io/n01e0/ppb:latest'
+  image: 'docker://ghcr.io/n01e0/ppb:latest'
   args:
     [
       '--organization',
@@ -29,4 +45,8 @@ runs:
       '${{ inputs.token }}',
       '--annotation-labels',
       '${{ inputs.annotation_labels }}',
+      '--title-format',
+      '${{ inputs.title_format }}',
+      '--body-format',
+      '${{ inputs.body_format }}',
     ]
