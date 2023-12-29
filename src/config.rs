@@ -81,8 +81,8 @@ impl Config {
     pub fn new(args: &Args) -> Result<Self> {
         match args.config {
             Some(ref config_file) => {
-                let config_file = std::fs::read_to_string(config_file).unwrap();
-                let config_file: ConfigFile = serde_yaml::from_str(&config_file).unwrap();
+                let config_file = std::fs::read_to_string(config_file)?;
+                let config_file: ConfigFile = serde_yaml::from_str(&config_file)?;
                 Ok(Config {
                     organization: config_file
                         .organization
