@@ -2,51 +2,20 @@ name: 'Postpone Bot'
 author: 'n01e0'
 description: 'Create an issue for implementation that has been postponed with comments such as TODO or FIXME.'
 inputs:
-  organization:
-    description: 'organization'
-    required: true
-  repository:
-    description: 'repository'
+  config_file:
+    description: 'config file'
     required: true
   token:
     description: 'GitHub token'
     required: true
-  annotation_labels:
-    description: 'annotation comment labels'
-    required: false
-    default: 'TODO:* ,FIXME:* , BUG:* ,HACK:* '
-  title_format:
-    description: 'issue title format'
-    required: false
-    default: '[Postpone] {label} {line}'
-  body_format:
-    description: 'issue body format'
-    required: false
-    default: |
-      This issue was created by Postpone Bot
-      \{label\}
-
-      \{file\}:\{line_number\}
-
-      ```
-      \{line\}
-      ```
 
 runs:
   using: 'docker'
   image: 'docker://ghcr.io/n01e0/ppb:latest'
   args:
     [
-      '--organization',
-      '${{ inputs.organization }}',
-      '--repository',
-      '${{ inputs.repository }}',
       '--token',
       '${{ inputs.token }}',
-      '--annotation-labels',
-      '${{ inputs.annotation_labels }}',
-      '--title-format',
-      '${{ inputs.title_format }}',
-      '--body-format',
-      '${{ inputs.body_format }}',
+      '--config-file',
+      '${{ inputs.config_file }}',
     ]

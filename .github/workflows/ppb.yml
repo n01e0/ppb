@@ -20,6 +20,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: n01e0/ppb@main
         with:
-          organization: n01e0
-          repository: ppb
           token: ${{ secrets.GITHUB_TOKEN }}
+          config_file: postpone.yml
+

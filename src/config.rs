@@ -61,7 +61,7 @@ pub struct Args {
 struct ConfigFile {
     organization: Option<String>,
     repository: Option<String>,
-    token: String,
+    token: Option<String>,
     annotation_labels: Option<Vec<String>>,
     title_format: Option<String>,
     body_format: Option<String>,
@@ -86,12 +86,16 @@ impl Config {
                 Ok(Config {
                     organization: config_file
                         .organization
+                        .or(args.organization.clone())
                         .with_context(|| "organization must be set")?,
                     repository: config_file
                         .repository
+                        .or(args.repository.clone())
                         .with_context(|| "repository must be set")?,
-                    token: config_file.token,
-                    annotation_labels: config_file.annotation_labels.unwrap_or_else(|| {
+                    token: config_file.token.or(args.token.clone()).with_context(|| {
+                        "token must be set"
+                    })?,
+                    annotation_labels: config_file.annotation_labels.or(args.annotation_labels.clone()).unwrap_or_else(|| {
                         DEFAULT_ANNOTATION_LABELS
                             .iter()
                             .map(|s| s.to_string())
@@ -99,9 +103,11 @@ impl Config {
                     }),
                     title_format: config_file
                         .title_format
+                        .or(args.title_format.clone())
                         .unwrap_or_else(|| DEFAULT_TITLE_FORMAT.to_string()),
                     body_format: config_file
                         .body_format
+                        .or(args.title_format.clone())
                         .unwrap_or_else(|| DEFAULT_BODY_FORMAT.to_string()),
                 })
             }
