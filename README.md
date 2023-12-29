@@ -47,3 +47,27 @@ annotation_labels:
 title_format: "{label}: {file}:{line_number}"
 body_format: "{line}"
  ```
+
+## Actions
+
+```yaml
+name: Postpone Bot
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  ppb:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: n01e0/ppb@release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config: "postpone.yml"
+```
