@@ -1,6 +1,6 @@
-use anyhow::{anyhow, Result, Context};
-use octocrab::{Octocrab, OctocrabBuilder, models::issues::Issue, params};
 use crate::config::{self, Config};
+use anyhow::{anyhow, Context, Result};
+use octocrab::{models::issues::Issue, params, Octocrab, OctocrabBuilder};
 
 #[derive(Debug)]
 pub struct GitHub<'a> {
@@ -18,7 +18,9 @@ impl<'a> GitHub<'a> {
     }
 
     pub async fn get_issues(&self) -> Result<Vec<Issue>> {
-        let page = self.client.issues(&self.config.organization, &self.config.repository)
+        let page = self
+            .client
+            .issues(&self.config.organization, &self.config.repository)
             .list()
             .labels(&vec![String::from(config::PPB_ISSUE_LABEL)])
             .state(params::State::All)
@@ -26,22 +28,20 @@ impl<'a> GitHub<'a> {
             .send()
             .await?;
 
-        self.client.all_pages::<Issue>(page).await.with_context(|| {
-            anyhow!("Failed to get issues from GitHub")
-        })
+        self.client
+            .all_pages::<Issue>(page)
+            .await
+            .with_context(|| anyhow!("Failed to get issues from GitHub"))
     }
 
     pub async fn create_issue(&self, title: &str, body: &str) -> Result<Issue> {
-        self.client.issues(&self.config.organization, &self.config.repository)
+        self.client
+            .issues(&self.config.organization, &self.config.repository)
             .create(title)
             .body(body)
             .labels(Some(vec![String::from(config::PPB_ISSUE_LABEL)]))
             .send()
             .await
-            .with_context(|| {
-                anyhow!("Failed to create issue on GitHub")
-            })
+            .with_context(|| anyhow!("Failed to create issue on GitHub"))
     }
 }
-
-

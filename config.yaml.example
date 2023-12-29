@@ -7,5 +7,5 @@ annotation_labels:
  - "BUG:* "
  - "HACK:* "
  - "#\\[allow\\([a-zA-Z_].+\\)\\]"
-title_format: "{label}: {file}:{line_number}"
+title_format: "{label}: {file} {line}"
 body_format: "{line}"

@@ -30,9 +30,6 @@ pub struct Args {
     /// GitHub token
     #[clap(long = "token")]
     pub token: Option<String>,
-    #[clap(long = "listup", short = 'l')]
-    /// list up postpones
-    pub listup: bool,
     /// annotation labels
     /// default: ["TODO", "FIXME"]
     #[clap(long="annotation-labels", value_parser, num_args = 1.., value_delimiter = ',')]
@@ -52,19 +49,19 @@ pub struct Args {
     /// dry run
     /// will not create issues
     /// default: false
-    #[clap(long="dry-run")]
+    #[clap(long = "dry-run")]
     pub dry_run: bool,
     // TODO ignore files
 }
 
 #[derive(Debug, Deserialize)]
-struct ConfigFile {
+pub struct ConfigFile {
     organization: Option<String>,
     repository: Option<String>,
     token: Option<String>,
-    annotation_labels: Option<Vec<String>>,
-    title_format: Option<String>,
-    body_format: Option<String>,
+    pub annotation_labels: Option<Vec<String>>,
+    pub title_format: Option<String>,
+    pub body_format: Option<String>,
 }
 
 #[derive(Debug)]
@@ -92,15 +89,19 @@ impl Config {
                         .repository
                         .or(args.repository.clone())
                         .with_context(|| "repository must be set")?,
-                    token: config_file.token.or(args.token.clone()).with_context(|| {
-                        "token must be set"
-                    })?,
-                    annotation_labels: config_file.annotation_labels.or(args.annotation_labels.clone()).unwrap_or_else(|| {
-                        DEFAULT_ANNOTATION_LABELS
-                            .iter()
-                            .map(|s| s.to_string())
-                            .collect()
-                    }),
+                    token: config_file
+                        .token
+                        .or(args.token.clone())
+                        .with_context(|| "token must be set")?,
+                    annotation_labels: config_file
+                        .annotation_labels
+                        .or(args.annotation_labels.clone())
+                        .unwrap_or_else(|| {
+                            DEFAULT_ANNOTATION_LABELS
+                                .iter()
+                                .map(|s| s.to_string())
+                                .collect()
+                        }),
                     title_format: config_file
                         .title_format
                         .or(args.title_format.clone())

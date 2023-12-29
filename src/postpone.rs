@@ -5,8 +5,8 @@ use grep::{
     searcher::{sinks::UTF8, Searcher},
 };
 use ignore::Walk;
-use strfmt::strfmt;
 use std::collections::HashMap;
+use strfmt::strfmt;
 
 #[derive(Debug)]
 pub struct Postpone {
@@ -65,13 +65,13 @@ impl Postpone {
 
     pub fn to_issue(&self, title_format: &str, body_format: &str) -> Result<(String, String)> {
         // TODO: permanent linkをつけたい
-            let mut vars = HashMap::new();
-            vars.insert("file".to_string(), self.file.clone());
-            vars.insert("line_number".to_string(), self.line_number.to_string());
-            vars.insert("label".to_string(), self.label.to_string());
-            vars.insert("line".to_string(), self.line.to_string());
-            let title = strfmt(&title_format, &vars)?;
-            let body = strfmt(&body_format, &vars)?;
-            Ok((title, body))
+        let mut vars = HashMap::new();
+        vars.insert("file".to_string(), self.file.clone());
+        vars.insert("line_number".to_string(), self.line_number.to_string());
+        vars.insert("label".to_string(), self.label.to_string());
+        vars.insert("line".to_string(), self.line.trim().to_string());
+        let title = strfmt(&title_format, &vars)?;
+        let body = strfmt(&body_format, &vars)?;
+        Ok((title, body))
     }
 }
