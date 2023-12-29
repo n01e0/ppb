@@ -17,5 +17,5 @@ runs:
       '--token',
       '${{ inputs.token }}',
       '--config',
-      '${{ inputs.config_file }}',
+      '${{ inputs.config }}',
     ]
