@@ -18,7 +18,7 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'ghcr.io/n01e0/ppb:latest'
   args:
     [
       '--organization',

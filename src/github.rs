@@ -3,18 +3,18 @@ use octocrab::{Octocrab, OctocrabBuilder, models::issues::Issue, params};
 use crate::config::{self, Config};
 
 #[derive(Debug)]
-pub struct GitHub {
-    config: Config,
+pub struct GitHub<'a> {
+    config: &'a Config,
     client: Octocrab,
 }
 
-impl GitHub {
-    pub fn new(config: Config) -> Result<Self> {
+impl<'a> GitHub<'a> {
+    pub fn new(config: &'a Config) -> Result<Self> {
         let client = OctocrabBuilder::new()
             .personal_token(config.token.to_string())
             .build()
             .context("Failed to create GitHub client")?;
-        Ok(Self { client, config })
+        Ok(Self { config, client })
     }
 
     pub async fn get_issues(&self) -> Result<Vec<Issue>> {

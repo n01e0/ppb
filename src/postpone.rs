@@ -1,12 +1,19 @@
-use grep::{regex::RegexMatcher, searcher::{Searcher, sinks::UTF8}};
+use anyhow::{Context, Result};
+use grep::{
+    matcher::Matcher,
+    regex::RegexMatcher,
+    searcher::{sinks::UTF8, Searcher},
+};
 use ignore::Walk;
-use anyhow::{Result, Context};
+use strfmt::strfmt;
+use std::collections::HashMap;
 
 #[derive(Debug)]
 pub struct Postpone {
     pub file: String,
     pub line_number: u64,
-    pub matched: String,
+    pub line: String,
+    pub label: String,
 }
 
 impl Postpone {
@@ -24,27 +31,47 @@ impl Postpone {
                 let path = entry.path();
                 let path = path.to_str().unwrap();
 
-                Searcher::new().search_path(
-                    &matcher,
-                    path,
-                    UTF8(|line_number, line| {
-                        result.push(Postpone{
-                            file: path.to_string(),
-                            line_number,
-                            matched: line.to_string()
-                        });
-                        Ok(true)
-                    })
-                ).with_context(|| format!("failed to search {}", path))
+                Searcher::new()
+                    .search_path(
+                        &matcher,
+                        path,
+                        UTF8(|line_number, line| {
+                            let mut label = String::new();
+                            if let Ok(Some(mat)) = matcher.find(line.as_bytes()) {
+                                let (start, end) = (mat.start(), mat.end());
+                                label = line[start..end].to_string();
+                                result.push(Postpone {
+                                    file: path.to_string(),
+                                    line_number,
+                                    line: line[end..].to_string(),
+                                    label,
+                                })
+                            } else {
+                                result.push(Postpone {
+                                    file: path.to_string(),
+                                    line_number,
+                                    line: line.to_string(),
+                                    label,
+                                })
+                            }
+                            Ok(true)
+                        }),
+                    )
+                    .with_context(|| format!("failed to search {}", path))
             })?;
 
         Ok(result)
     }
 
-    pub fn to_issue(&self) -> (String, String) {
-        // TODO: フォーマットを変えられるようにする
-        // TODO: タイトルがファイル名と行数じゃわかりづらい
+    pub fn to_issue(&self, title_format: &str, body_format: &str) -> Result<(String, String)> {
         // TODO: permanent linkをつけたい
-        (format!("{}:{}", self.file, self.line_number), self.matched.clone())
+            let mut vars = HashMap::new();
+            vars.insert("file".to_string(), self.file.clone());
+            vars.insert("line_number".to_string(), self.line_number.to_string());
+            vars.insert("label".to_string(), self.label.to_string());
+            vars.insert("line".to_string(), self.line.to_string());
+            let title = strfmt(&title_format, &vars)?;
+            let body = strfmt(&body_format, &vars)?;
+            Ok((title, body))
     }
 }

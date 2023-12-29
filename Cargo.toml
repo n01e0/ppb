@@ -1,6 +1,6 @@
 [package]
 name = "ppb"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "postpone bot"
 
@@ -15,6 +15,7 @@ octocrab = "0.32.0"
 rayon = "1.8.0"
 serde = { version="1.0.193", features=["derive"] }
 serde_yaml = "0.9.27"
+strfmt = "0.2.4"
 # TODO thiserror使う
 #thiserror = "1.0.50"
 tokio = { version="1.35.0", features=["macros", "rt-multi-thread"] }
