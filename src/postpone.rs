@@ -17,7 +17,7 @@ pub struct Postpone {
 }
 
 impl Postpone {
-    pub fn search(pattern: &str) -> Result<Vec<Self>> {
+    pub fn search(pattern: &str, ignore_file: &[String]) -> Result<Vec<Self>> {
         let matcher = RegexMatcher::new_line_matcher(pattern)?;
         let mut result = Vec::new();
 
@@ -26,6 +26,11 @@ impl Postpone {
             .filter_map(|e| e.ok())
             .filter(|e| e.file_type().map(|t| t.is_file()).unwrap_or(false))
             .filter(|e| !e.path().to_str().unwrap().starts_with(".git"))
+            .filter(|e| {
+                !ignore_file
+                    .iter()
+                    .any(|ignore| e.path().to_str().unwrap().contains(ignore))
+            })
             .into_iter()
             .try_for_each(|entry| {
                 let path = entry.path();

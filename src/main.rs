@@ -36,7 +36,7 @@ async fn main() -> Result<()> {
                     .with_context(|| "dry_run needs title format")?,
             ),
         };
-        let postpones = Postpone::search(&pattern)?
+        let postpones = Postpone::search(&pattern, &args.ignore_file.unwrap_or(Vec::new()))?
             .into_iter()
             .map(|postpone| postpone.to_issue(&title_format, &body_format))
             .filter_map(|issue| issue.ok())
@@ -59,7 +59,7 @@ async fn main() -> Result<()> {
         .filter(|issue| issue.labels.iter().any(|label| label.name == "postpone"))
         .collect::<Vec<_>>();
 
-    let postpones = Postpone::search(&pattern)?
+    let postpones = Postpone::search(&pattern, &config.ignore_file)?
         .into_iter()
         .map(|postpone| postpone.to_issue(&config.title_format, &config.body_format))
         .filter_map(|issue| issue.ok())
