@@ -34,7 +34,7 @@ pub struct Args {
     pub token: Option<String>,
     /// annotation labels
     /// default: ["TODO", "FIXME"]
-    #[clap(long="annotation-labels", value_parser, num_args = 1.., value_delimiter = ',')]
+    #[clap(long="annotation-labels", value_parser, num_args = 1.., value_delimiter = ',', default_value="TODO,FIXME")]
     pub annotation_labels: Option<Vec<String>>,
     /// title format
     /// you can use following variables
@@ -53,7 +53,9 @@ pub struct Args {
     /// default: false
     #[clap(long = "dry-run")]
     pub dry_run: bool,
-    // TODO ignore files
+    /// ignore file
+    #[clap(long = "ignore-file", value_parser, num_args = 1.., value_delimiter = ',')]
+    pub ignore_file: Option<Vec<String>>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -64,6 +66,7 @@ pub struct ConfigFile {
     pub annotation_labels: Option<Vec<String>>,
     pub title_format: Option<String>,
     pub body_format: Option<String>,
+    pub ignore_file: Option<Vec<String>>,
 }
 
 #[derive(Debug)]
@@ -74,6 +77,7 @@ pub struct Config {
     pub annotation_labels: Vec<String>,
     pub title_format: String,
     pub body_format: String,
+    pub ignore_file: Vec<String>,
 }
 
 impl Config {
@@ -112,6 +116,10 @@ impl Config {
                         .body_format
                         .or(args.title_format.clone())
                         .unwrap_or_else(|| DEFAULT_BODY_FORMAT.to_string()),
+                    ignore_file: config_file
+                        .ignore_file
+                        .or(args.ignore_file.clone())
+                        .unwrap_or(vec![])
                 })
             }
             None => Ok(Config {
@@ -138,6 +146,7 @@ impl Config {
                     .body_format
                     .clone()
                     .unwrap_or_else(|| DEFAULT_BODY_FORMAT.to_string()),
+                ignore_file: args.ignore_file.clone().unwrap_or_else(|| vec![])
             }),
         }
     }
