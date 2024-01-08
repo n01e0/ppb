@@ -34,7 +34,7 @@ pub struct Args {
     pub token: Option<String>,
     /// annotation labels
     /// default: ["TODO", "FIXME"]
-    #[clap(long="annotation-labels", value_parser, num_args = 1.., value_delimiter = ',')]
+    #[clap(long="annotation-labels", value_parser, num_args = 1.., value_delimiter = ',', default_value="TODO,FIXME")]
     pub annotation_labels: Option<Vec<String>>,
     /// title format
     /// you can use following variables
