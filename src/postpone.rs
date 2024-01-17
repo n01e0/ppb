@@ -2,7 +2,7 @@ use anyhow::{Context, Result};
 use grep::{
     matcher::Matcher,
     regex::RegexMatcher,
-    searcher::{sinks::UTF8, Searcher},
+    searcher::{sinks::UTF8, SearcherBuilder, BinaryDetection},
 };
 use ignore::Walk;
 use std::collections::HashMap;
@@ -36,7 +36,11 @@ impl Postpone {
                 let path = entry.path();
                 let path = path.to_str().unwrap();
 
-                Searcher::new()
+                let mut searcher = SearcherBuilder::new()
+                    .line_number(true)
+                    .binary_detection(BinaryDetection::quit(b'\x00'))
+                    .build();
+                searcher
                     .search_path(
                         &matcher,
                         path,
