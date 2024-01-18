@@ -70,6 +70,7 @@ pub struct ConfigFile {
     pub title_format: Option<String>,
     pub body_format: Option<String>,
     pub ignore_file: Option<Vec<String>>,
+    pub target_dir: Option<String>,
 }
 
 #[derive(Debug)]
@@ -124,7 +125,9 @@ impl Config {
                         .ignore_file
                         .or(args.ignore_file.clone())
                         .unwrap_or(vec![]),
-                    target_dir: args.target_dir.clone(),
+                    target_dir: config_file
+                        .target_dir
+                        .unwrap_or(args.target_dir.clone()),
                 })
             }
             None => Ok(Config {
