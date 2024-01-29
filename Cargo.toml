@@ -17,7 +17,7 @@ grep = "0.3.1"
 ignore = "0.4.22"
 octocrab = "0.32.0"
 rayon = "1.8.0"
-serde = { version="1.0.195", features=["derive"] }
+serde = { version="1.0.196", features=["derive"] }
 strfmt = "0.2.4"
 serde_yaml = "0.9.30"
 # TODO thiserror使う
