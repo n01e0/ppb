@@ -56,6 +56,9 @@ pub struct Args {
     /// ignore file
     #[clap(long = "ignore-file", value_parser, num_args = 1.., value_delimiter = ',')]
     pub ignore_file: Option<Vec<String>>,
+    /// target directory
+    #[clap(long = "target-dir", default_value = ".")]
+    pub target_dir: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -67,6 +70,7 @@ pub struct ConfigFile {
     pub title_format: Option<String>,
     pub body_format: Option<String>,
     pub ignore_file: Option<Vec<String>>,
+    pub target_dir: Option<String>,
 }
 
 #[derive(Debug)]
@@ -78,6 +82,7 @@ pub struct Config {
     pub title_format: String,
     pub body_format: String,
     pub ignore_file: Vec<String>,
+    pub target_dir: String,
 }
 
 impl Config {
@@ -119,7 +124,10 @@ impl Config {
                     ignore_file: config_file
                         .ignore_file
                         .or(args.ignore_file.clone())
-                        .unwrap_or(vec![])
+                        .unwrap_or(vec![]),
+                    target_dir: config_file
+                        .target_dir
+                        .unwrap_or(args.target_dir.clone()),
                 })
             }
             None => Ok(Config {
@@ -146,7 +154,8 @@ impl Config {
                     .body_format
                     .clone()
                     .unwrap_or_else(|| DEFAULT_BODY_FORMAT.to_string()),
-                ignore_file: args.ignore_file.clone().unwrap_or_else(|| vec![])
+                ignore_file: args.ignore_file.clone().unwrap_or_else(|| vec![]),
+                target_dir: args.target_dir.clone(),
             }),
         }
     }
