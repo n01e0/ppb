@@ -15,7 +15,6 @@ anyhow = "1.0.79"
 clap = { version="4.5.1", features=["derive"] }
 grep = "0.3.1"
 ignore = "0.4.22"
-octocrab = "0.32.0"
 rayon = "1.8.1"
 octocrab = "0.34.1"
 serde = { version="1.0.197", features=["derive"] }
