@@ -12,13 +12,14 @@ description = "postpone bot"
 
 [dependencies]
 anyhow = "1.0.79"
-clap = { version="4.4.17", features=["derive"] }
+clap = { version="4.5.1", features=["derive"] }
 grep = "0.3.1"
 ignore = "0.4.22"
-octocrab = "0.32.0"
-serde = { version="1.0.195", features=["derive"] }
+rayon = "1.8.1"
+octocrab = "0.34.1"
+serde = { version="1.0.197", features=["derive"] }
 strfmt = "0.2.4"
-serde_yaml = "0.9.30"
+serde_yaml = "0.9.32"
 # TODO thiserror使う
 #thiserror = "1.0.50"
 tokio = { version="1.35.1", features=["macros", "rt-multi-thread"] }
