@@ -1,6 +1,6 @@
 [package]
 name = "ppb"
-version = "0.7.0"
+version = "0.8.1"
 edition = "2021"
 authors = ["n01e0 <reoshiseki@gmail.com>"]
 license = "MIT"
