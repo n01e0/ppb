@@ -6,9 +6,11 @@ use grep::{
 };
 use ignore::Walk;
 use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
 use strfmt::strfmt;
+use rayon::prelude::*;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Postpone {
     pub file: String,
     pub line_number: u64,
@@ -19,9 +21,8 @@ pub struct Postpone {
 impl Postpone {
     pub fn search(target_dir: &str, pattern: &str, ignore_file: &[String]) -> Result<Vec<Self>> {
         let matcher = RegexMatcher::new_line_matcher(pattern)?;
-        let mut result = Vec::new();
+        let result = Arc::new(Mutex::new(Vec::new()));
 
-        // TODO: layonとか使って並列化したい
         Walk::new(target_dir)
             .filter_map(|e| e.ok())
             .filter(|e| e.file_type().map(|t| t.is_file()).unwrap_or(false))
@@ -32,10 +33,10 @@ impl Postpone {
                     .any(|ignore| e.path().to_str().unwrap().contains(ignore))
             })
             .into_iter()
+            .collect::<Vec<_>>()
+            .into_par_iter()
             .try_for_each(|entry| {
-                let path = entry.path();
-                let path = path.to_str().unwrap();
-
+                let path = entry.path().to_str().with_context(|| "Can't parse path")?;
                 let mut searcher = SearcherBuilder::new()
                     .line_number(true)
                     .binary_detection(BinaryDetection::quit(b'\x00'))
@@ -49,14 +50,14 @@ impl Postpone {
                             if let Ok(Some(mat)) = matcher.find(line.as_bytes()) {
                                 let (start, end) = (mat.start(), mat.end());
                                 label = line[start..end].to_string();
-                                result.push(Postpone {
+                                result.lock().expect("Can't lock result").push(Postpone {
                                     file: path.to_string(),
                                     line_number,
                                     line: line[end..].to_string(),
                                     label,
                                 })
                             } else {
-                                result.push(Postpone {
+                                result.lock().expect("Can't lock result").push(Postpone {
                                     file: path.to_string(),
                                     line_number,
                                     line: line.to_string(),
@@ -69,6 +70,7 @@ impl Postpone {
                     .with_context(|| format!("failed to search {}", path))
             })?;
 
+        let result = result.lock().expect("Can't lock result").to_vec();
         Ok(result)
     }
 
