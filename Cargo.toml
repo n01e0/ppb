@@ -19,7 +19,7 @@ rayon = "1.8.1"
 octocrab = "0.35.0"
 serde = { version="1.0.197", features=["derive"] }
 strfmt = "0.2.4"
-serde_yaml = "0.9.32"
+serde_yaml = "0.9.33"
 # TODO thiserror使う
 #thiserror = "1.0.50"
 tokio = { version="1.35.1", features=["macros", "rt-multi-thread"] }
