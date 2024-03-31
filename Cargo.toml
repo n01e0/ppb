@@ -16,7 +16,7 @@ clap = { version="4.5.2", features=["derive"] }
 grep = "0.3.1"
 ignore = "0.4.22"
 rayon = "1.10.0"
-octocrab = "0.35.0"
+octocrab = "0.37.0"
 serde = { version="1.0.197", features=["derive"] }
 strfmt = "0.2.4"
 serde_yaml = "0.9.32"
