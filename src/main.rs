@@ -16,15 +16,26 @@ async fn main() -> Result<()> {
             Some(config) => {
                 let config: ConfigFile = serde_yaml::from_str(&std::fs::read_to_string(config)?)?;
                 (
-                    config.target_dir.with_context(|| "dry_run needs target dir")?,
-                    format!("({})", config.annotation_labels.with_context(|| "dry_run needs annotation labels")?.join("|")),
-                    config.body_format.with_context(|| "dry_run needs body format")?,
-                    config.title_format.with_context(|| "dry_run needs title format")?,
+                    config
+                        .target_dir
+                        .with_context(|| "dry_run needs target dir")?,
+                    format!(
+                        "({})",
+                        config
+                            .annotation_labels
+                            .with_context(|| "dry_run needs annotation labels")?
+                            .join("|")
+                    ),
+                    config
+                        .body_format
+                        .with_context(|| "dry_run needs body format")?,
+                    config
+                        .title_format
+                        .with_context(|| "dry_run needs title format")?,
                 )
             }
             None => (
-                args.target_dir
-                    .clone(),
+                args.target_dir.clone(),
                 format!(
                     "({})",
                     args.annotation_labels
@@ -39,11 +50,15 @@ async fn main() -> Result<()> {
                     .with_context(|| "dry_run needs title format")?,
             ),
         };
-        let postpones = Postpone::search(&target_dir, &pattern, &args.ignore_file.unwrap_or(Vec::new()))?
-            .into_iter()
-            .map(|postpone| postpone.to_issue(&title_format, &body_format))
-            .filter_map(|issue| issue.ok())
-            .collect::<Vec<(String, String)>>();
+        let postpones = Postpone::search(
+            &target_dir,
+            &pattern,
+            &args.ignore_file.unwrap_or(Vec::new()),
+        )?
+        .into_iter()
+        .map(|postpone| postpone.to_issue(&title_format, &body_format))
+        .filter_map(|issue| issue.ok())
+        .collect::<Vec<(String, String)>>();
 
         for (title, body) in postpones {
             println!("title: {}\nbody: {}\n", title, body);

@@ -125,9 +125,7 @@ impl Config {
                         .ignore_file
                         .or(args.ignore_file.clone())
                         .unwrap_or(vec![]),
-                    target_dir: config_file
-                        .target_dir
-                        .unwrap_or(args.target_dir.clone()),
+                    target_dir: config_file.target_dir.unwrap_or(args.target_dir.clone()),
                 })
             }
             None => Ok(Config {

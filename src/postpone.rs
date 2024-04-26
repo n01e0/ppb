@@ -2,13 +2,13 @@ use anyhow::{Context, Result};
 use grep::{
     matcher::Matcher,
     regex::RegexMatcher,
-    searcher::{sinks::UTF8, SearcherBuilder, BinaryDetection},
+    searcher::{sinks::UTF8, BinaryDetection, SearcherBuilder},
 };
 use ignore::Walk;
+use rayon::prelude::*;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use strfmt::strfmt;
-use rayon::prelude::*;
 
 #[derive(Debug, Clone)]
 pub struct Postpone {
