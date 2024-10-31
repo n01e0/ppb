@@ -1,6 +1,8 @@
 use anyhow::{Context, Result};
 use clap::Parser;
 use serde::Deserialize;
+use git2::Repository;
+use git_url_parse::GitUrl;
 
 pub const DEFAULT_ANNOTATION_LABELS: [&str; 2] = ["TODO", "FIXME"];
 pub const DEFAULT_TITLE_FORMAT: &str = "[Postpone] {label}: {line}";
@@ -23,6 +25,8 @@ pub struct Args {
     /// config file
     #[clap(short, long)]
     pub config: Option<String>,
+    /// remtoe host
+    pub host: Option<String>,
     /// organization
     #[clap(long = "organization")]
     pub organization: Option<String>,
@@ -63,6 +67,7 @@ pub struct Args {
 
 #[derive(Debug, Deserialize)]
 pub struct ConfigFile {
+    host: Option<String>,
     organization: Option<String>,
     repository: Option<String>,
     token: Option<String>,
@@ -75,6 +80,7 @@ pub struct ConfigFile {
 
 #[derive(Debug)]
 pub struct Config {
+    pub host: String,
     pub organization: String,
     pub repository: String,
     pub token: String,
@@ -87,22 +93,39 @@ pub struct Config {
 
 impl Config {
     pub fn new(args: &Args) -> Result<Self> {
+        let remote: Option<GitUrl> = if let Ok(repo) = Repository::open(".") {
+            if let Ok(origin) = repo.find_remote("origin") {
+                origin.url().and_then(|url| GitUrl::parse(url).ok())
+            } else {
+                None
+            }
+        } else {
+            None
+        };
+
         match args.config {
             Some(ref config_file) => {
-                let config_file = std::fs::read_to_string(config_file)?;
-                let config_file: ConfigFile = serde_yaml::from_str(&config_file)?;
+                let config_file: ConfigFile = serde_yaml::from_str(&std::fs::read_to_string(config_file)?)?;
                 Ok(Config {
+                    host: config_file
+                        .host
+                        .or(args.host.clone())
+                        .or(remote.as_ref().map(|url| url.host.clone()).flatten())
+                        .unwrap_or(String::from("github.com")),
                     organization: config_file
                         .organization
                         .or(args.organization.clone())
+                        .or(remote.as_ref().map(|url| url.owner.clone()).flatten())
                         .with_context(|| "organization must be set")?,
                     repository: config_file
                         .repository
                         .or(args.repository.clone())
+                        .or(remote.as_ref().map(|url| url.name.clone()))
                         .with_context(|| "repository must be set")?,
                     token: config_file
                         .token
                         .or(args.token.clone())
+                        .or(remote.map(|url| url.token).flatten())
                         .with_context(|| "token must be set")?,
                     annotation_labels: config_file
                         .annotation_labels
@@ -129,15 +152,26 @@ impl Config {
                 })
             }
             None => Ok(Config {
+                host: args
+                    .host
+                    .clone()
+                    .or(remote.as_ref().map(|url| url.host.clone()).flatten())
+                    .with_context(|| "remote host must be set")?,
                 organization: args
                     .organization
                     .clone()
+                    .or(remote.as_ref().map(|url| url.owner.clone()).flatten())
                     .with_context(|| "organization must be set")?,
                 repository: args
                     .repository
                     .clone()
+                    .or(remote.as_ref().map(|url| url.name.clone()))
                     .with_context(|| "repository must be set")?,
-                token: args.token.clone().with_context(|| "token must be set")?,
+                token: args
+                    .token
+                    .clone()
+                    .or(remote.map(|url| url.token).flatten())
+                    .with_context(|| "token must be set")?,
                 annotation_labels: args.annotation_labels.clone().unwrap_or_else(|| {
                     DEFAULT_ANNOTATION_LABELS
                         .iter()
