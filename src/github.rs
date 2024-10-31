@@ -11,6 +11,7 @@ pub struct GitHub<'a> {
 impl<'a> GitHub<'a> {
     pub fn new(config: &'a Config) -> Result<Self> {
         let client = OctocrabBuilder::new()
+            .base_uri(format!("https://{}", config.host))?
             .personal_token(config.token.to_string())
             .build()
             .context("Failed to create GitHub client")?;
